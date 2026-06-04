@@ -909,14 +909,83 @@ function bindEvents() {
             resetForm();
         }
     });
-
-    // Toggle sidebar on mobile
-    const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
-    if (btnToggleSidebar) {
-        btnToggleSidebar.addEventListener('click', () => {
-            const sidebar = document.querySelector('.sidebar');
+    // Toggle sidebar
+    const sidebar = document.querySelector('.sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    
+    function toggleSidebar() {
+        const isMobile = window.innerWidth <= 1024;
+        
+        if (isMobile) {
             const isExpanded = sidebar.classList.toggle('expanded');
-            btnToggleSidebar.querySelector('span').textContent = isExpanded ? '❌ Hide Settings' : '⚙️ Show Settings';
+            if (backdrop) {
+                backdrop.classList.toggle('active', isExpanded);
+            }
+            
+            // Toggle active state for settings icon in mobile capsule
+            const btnCapsuleSettings = document.getElementById('btn-capsule-settings');
+            if (btnCapsuleSettings) {
+                btnCapsuleSettings.classList.toggle('active-settings', isExpanded);
+            }
+        } else {
+            // Toggle desktop sidebar visibility with a smooth slide
+            const container = document.querySelector('.app-container');
+            const isHidden = container.classList.toggle('sidebar-hidden');
+            
+            // Toggle active state for settings icon in desktop capsule
+            const btnCapsuleSettings = document.getElementById('btn-capsule-settings');
+            if (btnCapsuleSettings) {
+                btnCapsuleSettings.classList.toggle('active-settings', isHidden);
+            }
+        }
+    }
+    
+    function closeSidebar() {
+        sidebar.classList.remove('expanded');
+        if (backdrop) {
+            backdrop.classList.remove('active');
+        }
+        const btnCapsuleSettings = document.getElementById('btn-capsule-settings');
+        if (btnCapsuleSettings) {
+            btnCapsuleSettings.classList.remove('active-settings');
+        }
+    }
+
+    const btnCloseSidebarX = document.getElementById('btn-close-sidebar-x');
+    if (btnCloseSidebarX) {
+        btnCloseSidebarX.addEventListener('click', closeSidebar);
+    }
+    
+    if (backdrop) {
+        backdrop.addEventListener('click', closeSidebar);
+    }
+
+    // Action Capsule Event Listeners
+    const btnCapsuleSettings = document.getElementById('btn-capsule-settings');
+    if (btnCapsuleSettings) {
+        btnCapsuleSettings.addEventListener('click', toggleSidebar);
+    }
+
+    const btnCapsuleLoad = document.getElementById('btn-capsule-load');
+    if (btnCapsuleLoad) {
+        btnCapsuleLoad.addEventListener('click', () => {
+            loadSampleData();
+        });
+    }
+
+    const btnCapsuleReset = document.getElementById('btn-capsule-reset');
+    if (btnCapsuleReset) {
+        btnCapsuleReset.addEventListener('click', () => {
+            if (confirm("Are you sure you want to clear this entire invoice? This action cannot be undone.")) {
+                resetForm();
+            }
+        });
+    }
+
+    const btnCapsulePrint = document.getElementById('btn-capsule-print');
+    if (btnCapsulePrint) {
+        btnCapsulePrint.addEventListener('click', () => {
+            window.print();
         });
     }
 }

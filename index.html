@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=1.0.7">
+    <link rel="stylesheet" href="styles.css?v=1.1.3">
 </head>
 <body class="theme-blue">
     <!-- Main Dashboard Layout -->
@@ -17,6 +17,7 @@
         <!-- Sidebar Controls -->
         <aside class="sidebar no-print">
             <div class="sidebar-header">
+                <button type="button" class="btn-close-sidebar no-print" id="btn-close-sidebar-x" title="Close Settings">&times;</button>
                 <div class="logo-area">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="32" height="32" rx="9" fill="url(#logo-grad)"/>
@@ -172,6 +173,7 @@
 
         <!-- Main Invoice Creator View -->
         <main class="invoice-container">
+            
             <div class="invoice-paper" id="invoice-sheet">
                 
                 <!-- TOP HEADER SECTION -->
@@ -380,6 +382,41 @@
         
     </div>
 
-    <script src="app.js?v=1.0.7"></script>
+    <!-- Sidebar Backdrop for mobile drawer -->
+    <div class="sidebar-backdrop no-print" id="sidebar-backdrop"></div>
+
+    <!-- Sticky/Floating Action Capsule -->
+    <div class="action-capsule no-print">
+        <button type="button" class="capsule-btn btn-settings" id="btn-capsule-settings" title="Toggle Settings Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+        </button>
+        <button type="button" class="capsule-btn btn-load" id="btn-capsule-load" title="Load Sample Data">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+        </button>
+        <button type="button" class="capsule-btn btn-reset" id="btn-capsule-reset" title="Reset Invoice Form">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+        </button>
+        <div class="capsule-divider"></div>
+        <button type="button" class="capsule-btn btn-print-primary" id="btn-capsule-print" title="Print or Save PDF">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <span>Print PDF</span>
+        </button>
+    </div>
+
+    <script src="app.js?v=1.1.3"></script>
 </body>
 </html>
