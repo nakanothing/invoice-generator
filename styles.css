@@ -1448,6 +1448,8 @@ input:checked + .slider:before {
         background-color: #ffffff !important;
         color: #000000 !important;
         font-size: 12pt;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
     .app-container {
@@ -1504,15 +1506,15 @@ input:checked + .slider:before {
 
     /* Style titles */
     .invoice-title-input {
-        color: #000000 !important;
+        color: var(--primary-dark) !important;
         font-size: 28pt !important;
         font-weight: 800 !important;
         border-bottom: none !important;
     }
 
     .section-title, .extra-title {
-        color: #000000 !important;
-        border-bottom-color: #000000 !important;
+        color: var(--primary) !important;
+        border-bottom-color: var(--primary-light) !important;
     }
 
     .invoice-items-table {
@@ -1529,8 +1531,8 @@ input:checked + .slider:before {
     }
 
     .invoice-items-table th {
-        background-color: #f3f4f6 !important;
-        color: #000000 !important;
+        background-color: var(--primary-light) !important;
+        color: var(--primary-dark) !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
@@ -1547,9 +1549,12 @@ input:checked + .slider:before {
         break-inside: avoid !important; /* Keep notes and totals together on same page */
     }
 
-    .grand-total .total-label, .grand-total .total-val,
+    .grand-total .total-label, .grand-total .total-val {
+        color: var(--primary-dark) !important;
+    }
+    
     .balance-due-row .total-label, .balance-due-row .total-val {
-        color: #000000 !important;
+        color: #ef4444 !important;
     }
     
     /* Keep placeholders hidden when empty and printing */
