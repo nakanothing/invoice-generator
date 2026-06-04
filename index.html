@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billed | Professional Invoice Creator</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=1.0.7">
+</head>
+<body class="theme-blue">
+    <!-- Main Dashboard Layout -->
+    <div class="app-container">
+        
+        <!-- Sidebar Controls -->
+        <aside class="sidebar no-print">
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="9" fill="url(#logo-grad)"/>
+                        <rect x="8" y="8" width="16" height="3" rx="1.5" fill="#ffffff" opacity="0.9" />
+                        <rect x="8" y="14" width="16" height="3" rx="1.5" fill="#ffffff" opacity="0.9" />
+                        <rect x="8" y="20" width="10" height="3" rx="1.5" fill="#ffffff" opacity="0.9" />
+                        <circle cx="21.5" cy="21.5" r="2.5" fill="#60a5fa" />
+                        <defs>
+                            <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="var(--primary)"/>
+                                <stop offset="1" stop-color="var(--primary-dark)"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="brand-name">Billed.</span>
+                </div>
+                <p class="brand-subtitle">Create and download professional invoices in seconds.</p>
+                <button type="button" class="btn btn-outline btn-sm no-print mt-2" id="btn-toggle-sidebar" style="display: none; width: 100%;">
+                    <span>⚙️ Show Settings</span>
+                </button>
+            </div>
+
+            <div class="sidebar-sections-wrapper">
+                <!-- Theme and Branding Section -->
+                <div class="sidebar-section">
+                    <h3>Branding & Styling</h3>
+                    
+                    <label class="control-label">Theme Color</label>
+                    <div class="theme-picker">
+                        <button type="button" class="theme-btn active" data-theme="theme-blue" style="background: #3b82f6;" title="Blue"></button>
+                        <button type="button" class="theme-btn" data-theme="theme-green" style="background: #10b981;" title="Green"></button>
+                        <button type="button" class="theme-btn" data-theme="theme-purple" style="background: #8b5cf6;" title="Purple"></button>
+                        <button type="button" class="theme-btn" data-theme="theme-indigo" style="background: #4f46e5;" title="Indigo"></button>
+                        <button type="button" class="theme-btn" data-theme="theme-orange" style="background: #f97316;" title="Orange"></button>
+                        <button type="button" class="theme-btn" data-theme="theme-dark" style="background: #1f2937;" title="Charcoal"></button>
+                    </div>
+
+                    <label class="control-label mt-4">Invoice Template Font</label>
+                    <select id="font-family-select" class="sidebar-select">
+                        <option value="font-jakarta">Plus Jakarta Sans</option>
+                        <option value="font-outfit">Outfit</option>
+                        <option value="font-serif">Merriweather (Classic)</option>
+                        <option value="font-mono">Space Mono (Tech)</option>
+                    </select>
+                </div>
+
+                <!-- Invoice Configurations -->
+                <div class="sidebar-section">
+                    <h3>Invoice Configuration</h3>
+
+                    <label class="control-label">Currency</label>
+                    <select id="currency-select" class="sidebar-select">
+                        <option value="INR" data-symbol="₹">INR (₹) - Indian Rupee</option>
+                        <option value="USD" data-symbol="$">USD ($) - US Dollar</option>
+                        <option value="EUR" data-symbol="€">EUR (€) - Euro</option>
+                        <option value="GBP" data-symbol="£">GBP (£) - British Pound</option>
+                        <option value="AED" data-symbol="د.إ">AED (د.إ) - UAE Dirham</option>
+                        <option value="AUD" data-symbol="A$">AUD (A$) - Australian Dollar</option>
+                        <option value="CAD" data-symbol="C$">CAD (C$) - Canadian Dollar</option>
+                        <option value="SGD" data-symbol="S$">SGD (S$) - Singapore Dollar</option>
+                    </select>
+
+                    <label class="control-label mt-4">Tax Configuration</label>
+                    <div class="toggle-group">
+                        <label class="switch-container">
+                            <input type="checkbox" id="toggle-tax" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label">Enable Tax / GST</span>
+                    </div>
+
+                    <div id="tax-details-section" class="nested-controls">
+                        <label class="control-label">Tax Type</label>
+                        <select id="tax-type-select" class="sidebar-select">
+                            <option value="GST">GST (CGST + SGST split)</option>
+                            <option value="IGST">IGST (Single GST)</option>
+                            <option value="VAT">VAT / Custom Tax</option>
+                        </select>
+                        
+                        <label class="control-label mt-2">Default Tax Rate (%)</label>
+                        <input type="number" id="default-tax-rate" class="sidebar-input" value="18" min="0" max="100" step="0.1">
+                    </div>
+
+                    <label class="control-label mt-4">Discount Configuration</label>
+                    <select id="discount-type-select" class="sidebar-select">
+                        <option value="none">No Discount</option>
+                        <option value="percentage">Global Percentage (%)</option>
+                        <option value="flat">Global Flat Amount</option>
+                        <option value="per-item">Per Item Discount (%)</option>
+                    </select>
+
+                    <div id="discount-value-section" class="nested-controls hidden">
+                        <label class="control-label" id="discount-val-label">Discount Value</label>
+                        <input type="number" id="global-discount-value" class="sidebar-input" value="0" min="0" step="any">
+                    </div>
+                </div>
+
+                <!-- Toggles for Optional Blocks -->
+                <div class="sidebar-section">
+                    <h3>Optional Form Fields</h3>
+                    
+                    <div class="toggle-group">
+                        <label class="switch-container">
+                            <input type="checkbox" id="toggle-shipping" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label">Shipping / Handling Charges</span>
+                    </div>
+
+                    <div class="toggle-group mt-3">
+                        <label class="switch-container">
+                            <input type="checkbox" id="toggle-bank" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label">Bank Payment Details</span>
+                    </div>
+
+                    <div class="toggle-group mt-3">
+                        <label class="switch-container">
+                            <input type="checkbox" id="toggle-upi" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label">UPI Payment Details</span>
+                    </div>
+
+                    <div class="toggle-group mt-3">
+                        <label class="switch-container">
+                            <input type="checkbox" id="toggle-notes" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label">Notes & Terms</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Actions Footer -->
+            <div class="sidebar-actions">
+                <button type="button" class="btn btn-primary" id="btn-print">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Print or Save PDF
+                </button>
+                <p class="print-tip">Tip: Or press <strong>Ctrl + P</strong> (Cmd + P on Mac)</p>
+                <div class="action-grid">
+                    <button type="button" class="btn btn-outline" id="btn-load-sample">Load Sample</button>
+                    <button type="button" class="btn btn-danger-outline" id="btn-reset">Reset Form</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Invoice Creator View -->
+        <main class="invoice-container">
+            <div class="invoice-paper" id="invoice-sheet">
+                
+                <!-- TOP HEADER SECTION -->
+                <div class="invoice-header-row">
+                    <!-- Logo Upload -->
+                    <div class="logo-uploader-container">
+                        <div class="logo-preview-box" id="logo-dropzone">
+                            <input type="file" id="logo-input" accept="image/*" class="hidden-input">
+                            <div class="upload-placeholder" id="logo-placeholder">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                                <span>Upload Logo</span>
+                                <span class="subtext">Drag & drop or click</span>
+                            </div>
+                            <img src="" alt="Business Logo" class="logo-img hidden" id="logo-img">
+                            <button type="button" class="remove-logo-btn no-print" id="btn-remove-logo" title="Remove Logo">&times;</button>
+                        </div>
+                    </div>
+
+                    <!-- Title & Invoice Meta Details -->
+                    <div class="invoice-meta-info">
+                        <input type="text" class="invoice-title-input editable-text" value="INVOICE" placeholder="INVOICE" id="invoice-title">
+                        
+                        <div class="meta-fields-grid">
+                            <div class="meta-field-row">
+                                <label class="meta-field-label">Invoice No:</label>
+                                <input type="text" class="meta-field-value" value="INV-2026-001" placeholder="INV-001" id="inv-number">
+                            </div>
+                            <div class="meta-field-row">
+                                <label class="meta-field-label">Date:</label>
+                                <input type="date" class="meta-field-value" id="inv-date">
+                            </div>
+                            <div class="meta-field-row">
+                                <label class="meta-field-label">Due Date:</label>
+                                <input type="date" class="meta-field-value" id="inv-due-date">
+                            </div>
+                            <div class="meta-field-row">
+                                <label class="meta-field-label">P.O. Number:</label>
+                                <input type="text" class="meta-field-value" placeholder="Optional PO Number" id="inv-po">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADDRESSES SECTION -->
+                <div class="invoice-addresses-row">
+                    <!-- Bill From (Sender) -->
+                    <div class="address-card">
+                        <h4 class="section-title">Bill From</h4>
+                        <input type="text" class="address-input bold-name" value="Your Business Name" placeholder="Company/Your Name" id="from-name">
+                        <div class="address-fields-list" id="from-fields-list">
+                            <!-- Dynamic fields render here -->
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm no-print mt-2" id="btn-add-from-field" style="align-self: flex-start; padding: 4px 8px; font-size: 0.75rem;">
+                            + Add Custom Field
+                        </button>
+                    </div>
+
+                    <!-- Bill To (Recipient) -->
+                    <div class="address-card">
+                        <h4 class="section-title">Bill To</h4>
+                        <input type="text" class="address-input bold-name" value="Acme Corporation" placeholder="Client Company/Name" id="to-name">
+                        <div class="address-fields-list" id="to-fields-list">
+                            <!-- Dynamic fields render here -->
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm no-print mt-2" id="btn-add-to-field" style="align-self: flex-start; padding: 4px 8px; font-size: 0.75rem;">
+                            + Add Custom Field
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ITEMS TABLE SECTION -->
+                <div class="invoice-table-container">
+                    <table class="invoice-items-table" id="items-table">
+                        <thead>
+                            <tr>
+                                <th class="col-desc">Item Description</th>
+                                <th class="col-qty text-right">Qty</th>
+                                <th class="col-rate text-right">Rate</th>
+                                <th class="col-tax text-right" id="th-tax">Tax (%)</th>
+                                <th class="col-discount text-right" id="th-discount">Discount (%)</th>
+                                <th class="col-amount text-right">Amount</th>
+                                <th class="col-action no-print"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-tbody">
+                            <!-- JS will render line items here -->
+                        </tbody>
+                    </table>
+                    
+                    <button type="button" class="btn btn-outline btn-sm no-print mt-3" id="btn-add-item">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add New Line Item
+                    </button>
+                </div>
+
+                <!-- BOTTOM TOTALS & PAYMENT SECTION -->
+                <div class="invoice-bottom-row">
+                    <!-- Left: Notes & Bank info -->
+                    <div class="bottom-left-panel">
+                        <!-- Bank Details Block -->
+                        <div class="extra-block" id="block-bank">
+                            <h4 class="extra-title">Bank Details</h4>
+                            <div class="bank-details-grid">
+                                <div class="bank-row">
+                                    <span class="bank-label">Bank Name:</span>
+                                    <input type="text" class="bank-val" value="HDFC Bank" placeholder="Bank Name" id="bank-name">
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">Account No:</span>
+                                    <input type="text" class="bank-val" value="50100234567890" placeholder="Account Number" id="bank-account">
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">IFSC Code:</span>
+                                    <input type="text" class="bank-val" value="HDFC0000123" placeholder="IFSC Code" id="bank-ifsc">
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">Branch:</span>
+                                    <input type="text" class="bank-val" value="Kharghar, Navi Mumbai" placeholder="Branch Name" id="bank-branch">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- UPI ID Block -->
+                        <div class="extra-block" id="block-upi">
+                            <h4 class="extra-title">UPI Payment</h4>
+                            <div class="bank-details-grid">
+                                <div class="bank-row">
+                                    <span class="bank-label">UPI ID:</span>
+                                    <input type="text" class="bank-val" value="yourbusiness@ybl" placeholder="UPI ID (e.g. name@upi)" id="upi-id">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes & Terms Block -->
+                        <div class="extra-block" id="block-notes">
+                            <h4 class="extra-title">Terms & Notes</h4>
+                            <textarea class="terms-textarea" placeholder="Terms, payment methods, delivery instructions..." id="invoice-notes">1. Payment should be made within 15 days of invoice date.&#10;2. Goods once sold will not be taken back or exchanged.&#10;3. Thank you for choosing Invoify!</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Right: Math Totals -->
+                    <div class="bottom-right-panel">
+                        <div class="totals-list">
+                            <div class="total-row">
+                                <span class="total-label">Subtotal</span>
+                                <span class="total-val" id="val-subtotal">₹0.00</span>
+                            </div>
+
+                            <div class="total-row hidden" id="row-discount">
+                                <span class="total-label" id="lbl-discount">Discount</span>
+                                <span class="total-val text-red" id="val-discount">-₹0.00</span>
+                            </div>
+
+                            <!-- Single Tax Row (VAT / custom) -->
+                            <div class="total-row hidden" id="row-single-tax">
+                                <span class="total-label" id="lbl-single-tax">Tax</span>
+                                <span class="total-val" id="val-single-tax">₹0.00</span>
+                            </div>
+
+                            <!-- GST split Rows -->
+                            <div class="total-row hidden" id="row-cgst">
+                                <span class="total-label" id="lbl-cgst">CGST</span>
+                                <span class="total-val" id="val-cgst">₹0.00</span>
+                            </div>
+                            <div class="total-row hidden" id="row-sgst">
+                                <span class="total-label" id="lbl-sgst">SGST</span>
+                                <span class="total-val" id="val-sgst">₹0.00</span>
+                            </div>
+                            <div class="total-row hidden" id="row-igst">
+                                <span class="total-label" id="lbl-igst">IGST</span>
+                                <span class="total-val" id="val-igst">₹0.00</span>
+                            </div>
+
+                            <div class="total-row hidden" id="row-shipping">
+                                <span class="total-label">Shipping / Handling</span>
+                                <input type="number" class="shipping-input text-right" value="0" min="0" step="any" id="shipping-cost">
+                            </div>
+
+                            <div class="total-row grand-total">
+                                <span class="total-label">Total Due</span>
+                                <span class="total-val" id="val-total">₹0.00</span>
+                            </div>
+
+                            <div class="total-row" id="row-amount-paid">
+                                <span class="total-label">Amount Paid</span>
+                                <input type="number" class="shipping-input text-right" value="0" min="0" step="any" id="amount-paid" placeholder="0.00">
+                            </div>
+
+                            <div class="total-row balance-due-row" id="row-balance-due">
+                                <span class="total-label">Balance Due</span>
+                                <span class="total-val" id="val-balance-due">₹0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+        
+    </div>
+
+    <script src="app.js?v=1.0.7"></script>
+</body>
+</html>
