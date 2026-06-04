@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=1.1.3">
+    <link rel="stylesheet" href="styles.css?v=1.1.9">
 </head>
 <body class="theme-blue">
     <!-- Main Dashboard Layout -->
@@ -43,9 +43,9 @@
             <div class="sidebar-sections-wrapper">
                 <!-- Theme and Branding Section -->
                 <div class="sidebar-section">
-                    <h3>Branding & Styling</h3>
+                    <h3 data-i18n="sidebarHeader">Branding & Styling</h3>
                     
-                    <label class="control-label">Theme Color</label>
+                    <label class="control-label" data-i18n="themeColor">Theme Color</label>
                     <div class="theme-picker">
                         <button type="button" class="theme-btn active" data-theme="theme-blue" style="background: #3b82f6;" title="Blue"></button>
                         <button type="button" class="theme-btn" data-theme="theme-green" style="background: #10b981;" title="Green"></button>
@@ -55,20 +55,26 @@
                         <button type="button" class="theme-btn" data-theme="theme-dark" style="background: #1f2937;" title="Charcoal"></button>
                     </div>
 
-                    <label class="control-label mt-4">Invoice Template Font</label>
+                    <label class="control-label mt-4" data-i18n="fontLabel">Invoice Template Font</label>
                     <select id="font-family-select" class="sidebar-select">
                         <option value="font-jakarta">Plus Jakarta Sans</option>
                         <option value="font-outfit">Outfit</option>
                         <option value="font-serif">Merriweather (Classic)</option>
                         <option value="font-mono">Space Mono (Tech)</option>
                     </select>
+
+                    <label class="control-label mt-4" data-i18n="languageLabel">Invoice Language</label>
+                    <select id="language-select" class="sidebar-select">
+                        <option value="en">English</option>
+                        <option value="or">ଓଡ଼ିଆ (Odia)</option>
+                    </select>
                 </div>
 
                 <!-- Invoice Configurations -->
                 <div class="sidebar-section">
-                    <h3>Invoice Configuration</h3>
+                    <h3 data-i18n="configHeader">Invoice Configuration</h3>
 
-                    <label class="control-label">Currency</label>
+                    <label class="control-label" data-i18n="currencyLabel">Currency</label>
                     <select id="currency-select" class="sidebar-select">
                         <option value="INR" data-symbol="₹">INR (₹) - Indian Rupee</option>
                         <option value="USD" data-symbol="$">USD ($) - US Dollar</option>
@@ -80,28 +86,28 @@
                         <option value="SGD" data-symbol="S$">SGD (S$) - Singapore Dollar</option>
                     </select>
 
-                    <label class="control-label mt-4">Tax Configuration</label>
+                    <label class="control-label mt-4" data-i18n="taxConfig">Tax Configuration</label>
                     <div class="toggle-group">
                         <label class="switch-container">
                             <input type="checkbox" id="toggle-tax" checked>
                             <span class="slider"></span>
                         </label>
-                        <span class="toggle-label">Enable Tax / GST</span>
+                        <span class="toggle-label" data-i18n="taxConfig">Enable Tax / GST</span>
                     </div>
 
                     <div id="tax-details-section" class="nested-controls">
-                        <label class="control-label">Tax Type</label>
+                        <label class="control-label" data-i18n="taxTypeLabel">Tax Type</label>
                         <select id="tax-type-select" class="sidebar-select">
                             <option value="GST">GST (CGST + SGST split)</option>
                             <option value="IGST">IGST (Single GST)</option>
                             <option value="VAT">VAT / Custom Tax</option>
                         </select>
                         
-                        <label class="control-label mt-2">Default Tax Rate (%)</label>
+                        <label class="control-label mt-2" data-i18n="taxRateLabel">Default Tax Rate (%)</label>
                         <input type="number" id="default-tax-rate" class="sidebar-input" value="18" min="0" max="100" step="0.1">
                     </div>
 
-                    <label class="control-label mt-4">Discount Configuration</label>
+                    <label class="control-label mt-4" data-i18n="discountConfig">Discount Configuration</label>
                     <select id="discount-type-select" class="sidebar-select">
                         <option value="none">No Discount</option>
                         <option value="percentage">Global Percentage (%)</option>
@@ -110,21 +116,21 @@
                     </select>
 
                     <div id="discount-value-section" class="nested-controls hidden">
-                        <label class="control-label" id="discount-val-label">Discount Value</label>
+                        <label class="control-label" id="discount-val-label" data-i18n="discountValLabel">Discount Value</label>
                         <input type="number" id="global-discount-value" class="sidebar-input" value="0" min="0" step="any">
                     </div>
                 </div>
 
                 <!-- Toggles for Optional Blocks -->
                 <div class="sidebar-section">
-                    <h3>Optional Form Fields</h3>
+                    <h3 data-i18n="featuresHeader">Optional Form Fields</h3>
                     
                     <div class="toggle-group">
                         <label class="switch-container">
                             <input type="checkbox" id="toggle-shipping" checked>
                             <span class="slider"></span>
                         </label>
-                        <span class="toggle-label">Shipping / Handling Charges</span>
+                        <span class="toggle-label" data-i18n="toggleShipping">Shipping / Handling Charges</span>
                     </div>
 
                     <div class="toggle-group mt-3">
@@ -132,7 +138,7 @@
                             <input type="checkbox" id="toggle-bank" checked>
                             <span class="slider"></span>
                         </label>
-                        <span class="toggle-label">Bank Payment Details</span>
+                        <span class="toggle-label" data-i18n="toggleBank">Bank Payment Details</span>
                     </div>
 
                     <div class="toggle-group mt-3">
@@ -140,7 +146,7 @@
                             <input type="checkbox" id="toggle-upi" checked>
                             <span class="slider"></span>
                         </label>
-                        <span class="toggle-label">UPI Payment Details</span>
+                        <span class="toggle-label" data-i18n="toggleUpi">UPI Payment Details</span>
                     </div>
 
                     <div class="toggle-group mt-3">
@@ -148,7 +154,7 @@
                             <input type="checkbox" id="toggle-notes" checked>
                             <span class="slider"></span>
                         </label>
-                        <span class="toggle-label">Notes & Terms</span>
+                        <span class="toggle-label" data-i18n="toggleNotes">Notes & Terms</span>
                     </div>
                 </div>
             </div>
@@ -161,12 +167,12 @@
                         <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
                         <rect x="6" y="14" width="12" height="8"></rect>
                     </svg>
-                    Print or Save PDF
+                    <span data-i18n="btnPrint">Print or Save PDF</span>
                 </button>
                 <p class="print-tip">Tip: Or press <strong>Ctrl + P</strong> (Cmd + P on Mac)</p>
                 <div class="action-grid">
-                    <button type="button" class="btn btn-outline" id="btn-load-sample">Load Sample</button>
-                    <button type="button" class="btn btn-danger-outline" id="btn-reset">Reset Form</button>
+                    <button type="button" class="btn btn-outline" id="btn-load-sample" data-i18n="btnLoad">Load Sample</button>
+                    <button type="button" class="btn btn-danger-outline" id="btn-reset" data-i18n="btnReset">Reset Form</button>
                 </div>
             </div>
         </aside>
@@ -202,19 +208,19 @@
                         
                         <div class="meta-fields-grid">
                             <div class="meta-field-row">
-                                <label class="meta-field-label">Invoice No:</label>
+                                <label class="meta-field-label" data-i18n="invoiceNo">Invoice No:</label>
                                 <input type="text" class="meta-field-value" value="INV-2026-001" placeholder="INV-001" id="inv-number">
                             </div>
                             <div class="meta-field-row">
-                                <label class="meta-field-label">Date:</label>
+                                <label class="meta-field-label" data-i18n="date">Date:</label>
                                 <input type="date" class="meta-field-value" id="inv-date">
                             </div>
                             <div class="meta-field-row">
-                                <label class="meta-field-label">Due Date:</label>
+                                <label class="meta-field-label" data-i18n="dueDate">Due Date:</label>
                                 <input type="date" class="meta-field-value" id="inv-due-date">
                             </div>
                             <div class="meta-field-row">
-                                <label class="meta-field-label">P.O. Number:</label>
+                                <label class="meta-field-label" data-i18n="poNumber">P.O. Number:</label>
                                 <input type="text" class="meta-field-value" placeholder="Optional PO Number" id="inv-po">
                             </div>
                         </div>
@@ -225,24 +231,24 @@
                 <div class="invoice-addresses-row">
                     <!-- Bill From (Sender) -->
                     <div class="address-card">
-                        <h4 class="section-title">Bill From</h4>
+                        <h4 class="section-title" data-i18n="billFrom">Bill From</h4>
                         <input type="text" class="address-input bold-name" value="Your Business Name" placeholder="Company/Your Name" id="from-name">
                         <div class="address-fields-list" id="from-fields-list">
                             <!-- Dynamic fields render here -->
                         </div>
-                        <button type="button" class="btn btn-outline btn-sm no-print mt-2" id="btn-add-from-field" style="align-self: flex-start; padding: 4px 8px; font-size: 0.75rem;">
+                        <button type="button" class="btn btn-outline btn-sm no-print mt-2" id="btn-add-from-field" data-i18n="addCustomField" style="align-self: flex-start; padding: 4px 8px; font-size: 0.75rem;">
                             + Add Custom Field
                         </button>
                     </div>
 
                     <!-- Bill To (Recipient) -->
                     <div class="address-card">
-                        <h4 class="section-title">Bill To</h4>
+                        <h4 class="section-title" data-i18n="billTo">Bill To</h4>
                         <input type="text" class="address-input bold-name" value="Acme Corporation" placeholder="Client Company/Name" id="to-name">
                         <div class="address-fields-list" id="to-fields-list">
                             <!-- Dynamic fields render here -->
                         </div>
-                        <button type="button" class="btn btn-outline btn-sm no-print mt-2" id="btn-add-to-field" style="align-self: flex-start; padding: 4px 8px; font-size: 0.75rem;">
+                        <button type="button" class="btn btn-outline btn-sm no-print mt-2" id="btn-add-to-field" data-i18n="addCustomField" style="align-self: flex-start; padding: 4px 8px; font-size: 0.75rem;">
                             + Add Custom Field
                         </button>
                     </div>
@@ -253,12 +259,12 @@
                     <table class="invoice-items-table" id="items-table">
                         <thead>
                             <tr>
-                                <th class="col-desc">Item Description</th>
-                                <th class="col-qty text-right">Qty</th>
-                                <th class="col-rate text-right">Rate</th>
-                                <th class="col-tax text-right" id="th-tax">Tax (%)</th>
-                                <th class="col-discount text-right" id="th-discount">Discount (%)</th>
-                                <th class="col-amount text-right">Amount</th>
+                                <th class="col-desc" data-i18n="itemDesc">Item Description</th>
+                                <th class="col-qty text-right" data-i18n="qty">Qty</th>
+                                <th class="col-rate text-right" data-i18n="rate">Rate</th>
+                                <th class="col-tax text-right" id="th-tax" data-i18n="tax">Tax (%)</th>
+                                <th class="col-discount text-right" id="th-discount" data-i18n="discount">Discount (%)</th>
+                                <th class="col-amount text-right" data-i18n="amount">Amount</th>
                                 <th class="col-action no-print"></th>
                             </tr>
                         </thead>
@@ -267,7 +273,7 @@
                         </tbody>
                     </table>
                     
-                    <button type="button" class="btn btn-outline btn-sm no-print mt-3" id="btn-add-item">
+                    <button type="button" class="btn btn-outline btn-sm no-print mt-3" id="btn-add-item" data-i18n="addItem">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -282,22 +288,22 @@
                     <div class="bottom-left-panel">
                         <!-- Bank Details Block -->
                         <div class="extra-block" id="block-bank">
-                            <h4 class="extra-title">Bank Details</h4>
+                            <h4 class="extra-title" data-i18n="bankDetails">Bank Details</h4>
                             <div class="bank-details-grid">
                                 <div class="bank-row">
-                                    <span class="bank-label">Bank Name:</span>
+                                    <span class="bank-label" data-i18n="bankName">Bank Name:</span>
                                     <input type="text" class="bank-val" value="HDFC Bank" placeholder="Bank Name" id="bank-name">
                                 </div>
                                 <div class="bank-row">
-                                    <span class="bank-label">Account No:</span>
+                                    <span class="bank-label" data-i18n="bankAccount">Account No:</span>
                                     <input type="text" class="bank-val" value="50100234567890" placeholder="Account Number" id="bank-account">
                                 </div>
                                 <div class="bank-row">
-                                    <span class="bank-label">IFSC Code:</span>
+                                    <span class="bank-label" data-i18n="bankIfsc">IFSC Code:</span>
                                     <input type="text" class="bank-val" value="HDFC0000123" placeholder="IFSC Code" id="bank-ifsc">
                                 </div>
                                 <div class="bank-row">
-                                    <span class="bank-label">Branch:</span>
+                                    <span class="bank-label" data-i18n="bankBranch">Branch:</span>
                                     <input type="text" class="bank-val" value="Kharghar, Navi Mumbai" placeholder="Branch Name" id="bank-branch">
                                 </div>
                             </div>
@@ -305,10 +311,10 @@
 
                         <!-- UPI ID Block -->
                         <div class="extra-block" id="block-upi">
-                            <h4 class="extra-title">UPI Payment</h4>
+                            <h4 class="extra-title" data-i18n="upiDetails">UPI Payment</h4>
                             <div class="bank-details-grid">
                                 <div class="bank-row">
-                                    <span class="bank-label">UPI ID:</span>
+                                    <span class="bank-label" data-i18n="upiId">UPI ID:</span>
                                     <input type="text" class="bank-val" value="yourbusiness@ybl" placeholder="UPI ID (e.g. name@upi)" id="upi-id">
                                 </div>
                             </div>
@@ -316,8 +322,8 @@
 
                         <!-- Notes & Terms Block -->
                         <div class="extra-block" id="block-notes">
-                            <h4 class="extra-title">Terms & Notes</h4>
-                            <textarea class="terms-textarea" placeholder="Terms, payment methods, delivery instructions..." id="invoice-notes">1. Payment should be made within 15 days of invoice date.&#10;2. Goods once sold will not be taken back or exchanged.&#10;3. Thank you for choosing Invoify!</textarea>
+                            <h4 class="extra-title" data-i18n="notesTerms">Terms & Notes</h4>
+                            <textarea class="terms-textarea" placeholder="Terms, payment methods, delivery instructions..." id="invoice-notes">1. Payment should be made within 15 days of invoice date.&#10;2. Goods once sold will not be taken back or exchanged.&#10;3. Thank you for choosing Billed!</textarea>
                         </div>
                     </div>
 
@@ -325,18 +331,18 @@
                     <div class="bottom-right-panel">
                         <div class="totals-list">
                             <div class="total-row">
-                                <span class="total-label">Subtotal</span>
+                                <span class="total-label" data-i18n="subtotal">Subtotal</span>
                                 <span class="total-val" id="val-subtotal">₹0.00</span>
                             </div>
 
                             <div class="total-row hidden" id="row-discount">
-                                <span class="total-label" id="lbl-discount">Discount</span>
+                                <span class="total-label" id="lbl-discount" data-i18n="discountLabel">Discount</span>
                                 <span class="total-val text-red" id="val-discount">-₹0.00</span>
                             </div>
 
                             <!-- Single Tax Row (VAT / custom) -->
                             <div class="total-row hidden" id="row-single-tax">
-                                <span class="total-label" id="lbl-single-tax">Tax</span>
+                                <span class="total-label" id="lbl-single-tax" data-i18n="vatLabel">Tax / VAT</span>
                                 <span class="total-val" id="val-single-tax">₹0.00</span>
                             </div>
 
@@ -355,22 +361,22 @@
                             </div>
 
                             <div class="total-row hidden" id="row-shipping">
-                                <span class="total-label">Shipping / Handling</span>
+                                <span class="total-label" data-i18n="shipping">Shipping / Handling</span>
                                 <input type="number" class="shipping-input text-right" value="0" min="0" step="any" id="shipping-cost">
                             </div>
 
                             <div class="total-row grand-total">
-                                <span class="total-label">Total Due</span>
+                                <span class="total-label" data-i18n="totalDue">Total Due</span>
                                 <span class="total-val" id="val-total">₹0.00</span>
                             </div>
 
                             <div class="total-row" id="row-amount-paid">
-                                <span class="total-label">Amount Paid</span>
+                                <span class="total-label" data-i18n="amountPaid">Amount Paid</span>
                                 <input type="number" class="shipping-input text-right" value="0" min="0" step="any" id="amount-paid" placeholder="0.00">
                             </div>
 
                             <div class="total-row balance-due-row" id="row-balance-due">
-                                <span class="total-label">Balance Due</span>
+                                <span class="total-label" data-i18n="balanceDue">Balance Due</span>
                                 <span class="total-val" id="val-balance-due">₹0.00</span>
                             </div>
                         </div>
@@ -417,6 +423,6 @@
         </button>
     </div>
 
-    <script src="app.js?v=1.1.3"></script>
+    <script src="app.js?v=1.1.9"></script>
 </body>
 </html>

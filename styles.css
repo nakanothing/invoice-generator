@@ -414,6 +414,7 @@ input:checked + .slider:before {
     flex-direction: column;
     position: relative;
     transition: font-family 0.2s ease;
+    flex-shrink: 0; /* Prevent the flex layout engine from shrinking the card height */
 }
 
 /* Invoice Header Row */
@@ -423,6 +424,7 @@ input:checked + .slider:before {
     align-items: flex-start;
     gap: 40px;
     margin-bottom: 40px;
+    flex-shrink: 0;
 }
 
 /* Logo Uploader Box */
@@ -596,6 +598,7 @@ input:checked + .slider:before {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     margin-bottom: 40px;
+    flex-shrink: 0;
 }
 
 .address-card {
@@ -687,6 +690,8 @@ input:checked + .slider:before {
 /* Items Table */
 .invoice-table-container {
     margin-bottom: 30px;
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 
 .invoice-items-table {
@@ -820,8 +825,9 @@ input:checked + .slider:before {
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: 40px;
-    margin-top: auto; /* Push notes/totals down to pad space */
+    margin-top: 40px; /* Changed from auto to prevent flex layout collapses */
     padding-top: 30px;
+    flex-shrink: 0;
 }
 
 .bottom-left-panel {
@@ -1456,6 +1462,7 @@ input:checked + .slider:before {
     }
 
     .invoice-paper {
+        display: block !important; /* Fix flex layout page-break bugs */
         box-shadow: none !important;
         border: none !important;
         padding: 0 !important;
@@ -1508,6 +1515,19 @@ input:checked + .slider:before {
         border-bottom-color: #000000 !important;
     }
 
+    .invoice-items-table {
+        page-break-inside: auto !important;
+    }
+
+    .invoice-items-table thead {
+        display: table-header-group !important; /* Repeat table header on multi-page prints */
+    }
+
+    .invoice-items-table tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
     .invoice-items-table th {
         background-color: #f3f4f6 !important;
         color: #000000 !important;
@@ -1519,6 +1539,12 @@ input:checked + .slider:before {
     .address-textarea, .terms-textarea, .item-desc-input {
         resize: none !important;
         overflow: hidden !important;
+    }
+
+    .invoice-bottom-row {
+        margin-top: 30px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important; /* Keep notes and totals together on same page */
     }
 
     .grand-total .total-label, .grand-total .total-val,

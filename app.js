@@ -20,6 +20,7 @@ window.addEventListener('error', (event) => {
 
 // Invoice State
 let state = {
+    language: 'en',
     invoiceTitle: 'INVOICE',
     invoiceNumber: 'INV-2026-001',
     invoiceDate: '',
@@ -81,6 +82,7 @@ let state = {
 
 // Initial State (Default empty sheet)
 const DEFAULT_STATE = {
+    language: 'en',
     invoiceTitle: 'INVOICE',
     invoiceNumber: 'INV-2026-001',
     invoiceDate: '',
@@ -135,6 +137,7 @@ const dom = {
     // Sidebar Controls
     themeBtns: document.querySelectorAll('.theme-btn'),
     fontFamilySelect: document.getElementById('font-family-select'),
+    languageSelect: document.getElementById('language-select'),
     currencySelect: document.getElementById('currency-select'),
     toggleTax: document.getElementById('toggle-tax'),
     taxDetailsSection: document.getElementById('tax-details-section'),
@@ -218,6 +221,205 @@ const dom = {
     valBalanceDue: document.getElementById('val-balance-due'),
 };
 
+// Translation Dictionaries and Helpers
+const locales = {
+    en: {
+        sidebarHeader: "Branding & Styling",
+        themeColor: "Theme Color",
+        fontLabel: "Invoice Template Font",
+        languageLabel: "Invoice Language",
+        configHeader: "Invoice Configuration",
+        currencyLabel: "Currency",
+        taxConfig: "Enable Tax / GST",
+        taxTypeLabel: "Tax Type",
+        taxRateLabel: "Default Tax Rate (%)",
+        discountConfig: "Discount Configuration",
+        discountValLabel: "Discount Value",
+        featuresHeader: "Optional Form Fields",
+        toggleShipping: "Shipping / Handling Charges",
+        toggleBank: "Bank Payment Details",
+        toggleUpi: "UPI Payment Details",
+        toggleNotes: "Notes & Terms",
+        btnPrint: "Print or Save PDF",
+        btnLoad: "Load Sample",
+        btnReset: "Reset Form",
+        invoiceNo: "Invoice No:",
+        date: "Date:",
+        dueDate: "Due Date:",
+        poNumber: "P.O. Number:",
+        billFrom: "Bill From",
+        billTo: "Bill To",
+        addCustomField: "+ Add Custom Field",
+        itemDesc: "Item Description",
+        qty: "Qty",
+        rate: "Rate",
+        tax: "Tax (%)",
+        discount: "Discount (%)",
+        amount: "Amount",
+        addItem: "Add New Line Item",
+        bankDetails: "Bank Details",
+        bankName: "Bank Name:",
+        bankAccount: "Account No:",
+        bankIfsc: "IFSC Code:",
+        bankBranch: "Branch:",
+        upiDetails: "UPI Payment",
+        upiId: "UPI ID:",
+        notesTerms: "Terms & Notes",
+        subtotal: "Subtotal",
+        discountLabel: "Discount",
+        itemDiscountLabel: "Item Discount",
+        vatLabel: "Tax / VAT",
+        shipping: "Shipping / Handling",
+        totalDue: "Total Due",
+        amountPaid: "Amount Paid",
+        balanceDue: "Balance Due",
+        logoUploadText: "Upload Logo",
+        logoUploadSubtext: "Drag & drop or click",
+        alertMinItems: "An invoice must contain at least one item line.",
+        confirmReset: "Are you sure you want to clear this entire invoice? This action cannot be undone.",
+        printTipText: "Tip: Or press Ctrl + P (Cmd + P on Mac)",
+        btnPrintCapsule: "Print PDF"
+    },
+    or: {
+        sidebarHeader: "ବ୍ରାଣ୍ଡିଂ ଏବଂ ଷ୍ଟାଇଲିଂ",
+        themeColor: "ଥିମ୍ ରଙ୍ଗ",
+        fontLabel: "ଇନଭଏସ ଫଣ୍ଟ",
+        languageLabel: "ଇନଭଏସ ଭାଷା",
+        configHeader: "ଇନଭଏସ ବିନ୍ୟାସ",
+        currencyLabel: "ମୁଦ୍ରା",
+        taxConfig: "ଟ୍ୟାକ୍ସ / ଜିଏସଟି ସକ୍ରିୟ କରନ୍ତୁ",
+        taxTypeLabel: "ଟ୍ୟାକ୍ସ ପ୍ରକାର",
+        taxRateLabel: "ଡିଫଲ୍ଟ ଟ୍ୟାକ୍ସ ହାର (%)",
+        discountConfig: "ରିହାତି ବିନ୍ୟାସ",
+        discountValLabel: "ରିହାତି ମୂଲ୍ୟ",
+        featuresHeader: "ବିକଳ୍ପ ଫର୍ମ ଫିଲ୍ଡ",
+        toggleShipping: "ପରିବହନ ଚାର୍ଜ",
+        toggleBank: "ବ୍ୟାଙ୍କ ପେମେଣ୍ଟ ବିବରଣୀ",
+        toggleUpi: "UPI ପେମେଣ୍ଟ ବିବରଣୀ",
+        toggleNotes: "ଟିପ୍ପଣୀ ଏବଂ ସର୍ତ୍ତାବଳୀ",
+        btnPrint: "ପ୍ରିଣ୍ଟ କିମ୍ବା PDF ସେଭ୍ କରନ୍ତୁ",
+        btnLoad: "ନମୁନା ଲୋଡ୍ କରନ୍ତୁ",
+        btnReset: "ଫର୍ମ ରିସେଟ୍ କରନ୍ତୁ",
+        invoiceNo: "ଇନଭଏସ ନମ୍ବର:",
+        date: "ତାରିଖ:",
+        dueDate: "ଦେୟ ତାରିଖ:",
+        poNumber: "P.O. ନମ୍ବର:",
+        billFrom: "ବିଲ୍ ପ୍ରେରକ",
+        billTo: "ବିଲ୍ ପ୍ରାପ୍ତକର୍ତ୍ତା",
+        addCustomField: "+ ନୂତନ ଫିଲ୍ଡ ଯୋଡନ୍ତୁ",
+        itemDesc: "ସାମଗ୍ରୀର ବିବରଣୀ",
+        qty: "ପରିମାଣ",
+        rate: "ମୂଲ୍ୟ",
+        tax: "ଟ୍ୟାକ୍ସ (%)",
+        discount: "ରିହାତି (%)",
+        amount: "ମୋଟ ମୂଲ୍ୟ",
+        addItem: "ନୂତନ ସାମଗ୍ରୀ ଯୋଡନ୍ତୁ",
+        bankDetails: "ବ୍ୟାଙ୍କ ବିବରଣୀ",
+        bankName: "ବ୍ୟାଙ୍କ ନାମ:",
+        bankAccount: "ଆକାଉଣ୍ଟ ନମ୍ବର:",
+        bankIfsc: "IFSC କୋଡ୍:",
+        bankBranch: "ଶାଖା:",
+        upiDetails: "UPI ପେମେଣ୍ଟ",
+        upiId: "UPI ID:",
+        notesTerms: "ସର୍ତ୍ତାବଳୀ ଏବଂ ଟିପ୍ପଣୀ",
+        subtotal: "ଉପ-ମୋଟ",
+        discountLabel: "ରିହାତି",
+        itemDiscountLabel: "ସାମଗ୍ରୀ ରିହାତି",
+        vatLabel: "ଟ୍ୟାକ୍ସ / VAT",
+        shipping: "ପରିବହନ / ପରିଚାଳନା",
+        totalDue: "ମୋଟ ଦେୟ",
+        amountPaid: "ପୈଠ କରାଯାଇଥିବା ଅର୍ଥ",
+        balanceDue: "ବାକି ଦେୟ",
+        logoUploadText: "ଲୋଗୋ ଅପଲୋଡ୍ କରନ୍ତୁ",
+        logoUploadSubtext: "ଟାଣି ଆଣନ୍ତୁ କିମ୍ବା କ୍ଲିକ୍ କରନ୍ତୁ",
+        alertMinItems: "ଗୋଟିଏ ଇନଭଏସରେ ଅତିକମରେ ଗୋଟିଏ ସାମଗ୍ରୀ ରହିବା ଆବଶ୍ୟକ।",
+        confirmReset: "ଆପଣ କଣ ଏହି ସମ୍ପୂର୍ଣ୍ଣ ଇନଭଏସକୁ ଖାଲି କରିବାକୁ ଚାହାଁନ୍ତି? ଏହା ପୂର୍ବାବସ୍ଥାକୁ ଫେରାଇ ଅଣାଯାଇପାରିବ ନାହିଁ।",
+        printTipText: "ଟିପ୍ପଣୀ: କିମ୍ବା Ctrl + P (Mac ରେ Cmd + P) ଦବାନ୍ତୁ",
+        btnPrintCapsule: "ପ୍ରିଣ୍ଟ PDF"
+    }
+};
+
+const defaultFieldLabels = {
+    en: {
+        email: "Email Address",
+        phone: "Phone Number",
+        address: "Address",
+        tax: "GSTIN",
+        taxId: "Tax ID"
+    },
+    or: {
+        email: "ଇମେଲ ଆଡ୍ରେସ",
+        phone: "ଫୋନ ନମ୍ବର",
+        address: "ଠିକଣା",
+        tax: "ଜିଏସଟିଆଇଏନ୍ (GSTIN)",
+        taxId: "ଟ୍ୟାକ୍ସ ID"
+    }
+};
+
+function getLocaleText(key) {
+    const lang = state.language || 'en';
+    return locales[lang]?.[key] || locales['en']?.[key] || key;
+}
+
+function applyLanguage() {
+    const lang = state.language || 'en';
+    
+    // 1. Static text translations using data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const text = getLocaleText(key);
+        
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            el.placeholder = text;
+        } else {
+            const svg = el.querySelector('svg');
+            if (svg) {
+                el.innerHTML = '';
+                el.appendChild(svg);
+                el.appendChild(document.createTextNode(' ' + text));
+            } else {
+                el.textContent = text;
+            }
+        }
+    });
+    
+    // 2. Extra translations for specific elements
+    const logoPlaceholder = document.getElementById('logo-placeholder');
+    if (logoPlaceholder) {
+        const spanText = logoPlaceholder.querySelector('span:not(.subtext)');
+        const subtextText = logoPlaceholder.querySelector('span.subtext');
+        if (spanText) spanText.textContent = getLocaleText('logoUploadText');
+        if (subtextText) subtextText.textContent = getLocaleText('logoUploadSubtext');
+    }
+    
+    const printTip = document.querySelector('.print-tip');
+    if (printTip) {
+        printTip.innerHTML = getLocaleText('printTipText').replace('Ctrl + P', '<strong>Ctrl + P</strong>').replace('Cmd + P', '<strong>Cmd + P</strong>');
+    }
+    
+    const btnCapsulePrint = document.getElementById('btn-capsule-print');
+    if (btnCapsulePrint) {
+        const textSpan = btnCapsulePrint.querySelector('span');
+        if (textSpan) textSpan.textContent = getLocaleText('btnPrintCapsule');
+    }
+}
+
+function translateAddressFields(oldLang, newLang) {
+    const translateSectionFields = (fields) => {
+        if (!fields || !Array.isArray(fields)) return;
+        fields.forEach(field => {
+            const matchedKey = Object.keys(defaultFieldLabels[oldLang]).find(key => {
+                return defaultFieldLabels[oldLang][key].toLowerCase().trim() === field.label.toLowerCase().trim();
+            });
+            if (matchedKey && defaultFieldLabels[newLang][matchedKey]) {
+                field.label = defaultFieldLabels[newLang][matchedKey];
+            }
+        });
+    };
+    translateSectionFields(state.fromFields);
+    translateSectionFields(state.toFields);
+}
+
 // Initialize dates if empty
 function initializeDates() {
     if (!state.invoiceDate) {
@@ -262,6 +464,10 @@ function loadStateToDOM() {
     const paper = document.getElementById('invoice-sheet');
     paper.className = `invoice-paper ${state.fontFamily}`;
     
+    // Apply Language and selector value
+    dom.languageSelect.value = state.language || 'en';
+    applyLanguage();
+    
     // Settings dropdowns
     dom.currencySelect.value = state.currency;
     dom.toggleTax.checked = state.taxEnabled;
@@ -274,11 +480,13 @@ function loadStateToDOM() {
     // Handle global discount visibility
     dom.discountValueSection.classList.toggle('hidden', state.discountType === 'none' || state.discountType === 'per-item');
     if (state.discountType === 'percentage') {
-        dom.discountValLabel.textContent = 'Global Discount (%)';
+        const base = getLocaleText('discountValLabel');
+        dom.discountValLabel.textContent = `${base} (%)`;
         dom.globalDiscountValueInput.max = 100;
         dom.globalDiscountValueInput.step = 'any';
     } else if (state.discountType === 'flat') {
-        dom.discountValLabel.textContent = `Global Discount (${state.currencySymbol})`;
+        const base = getLocaleText('discountValLabel');
+        dom.discountValLabel.textContent = `${base} (${state.currencySymbol})`;
         dom.globalDiscountValueInput.removeAttribute('max');
         dom.globalDiscountValueInput.step = 'any';
     }
@@ -462,11 +670,12 @@ function renderItemsAndTotals() {
     if (state.discountType !== 'none') {
         dom.rowDiscount.classList.remove('hidden');
         if (state.discountType === 'percentage') {
-            dom.lblDiscount.textContent = `Discount (${state.globalDiscountValue}%)`;
+            const base = getLocaleText('discountLabel');
+            dom.lblDiscount.textContent = `${base} (${state.globalDiscountValue}%)`;
         } else if (state.discountType === 'flat') {
-            dom.lblDiscount.textContent = 'Discount';
+            dom.lblDiscount.textContent = getLocaleText('discountLabel');
         } else {
-            dom.lblDiscount.textContent = 'Item Discount';
+            dom.lblDiscount.textContent = getLocaleText('itemDiscountLabel');
         }
         dom.valDiscount.textContent = `-${formatCurrency(finalDiscount)}`;
     } else {
@@ -501,7 +710,8 @@ function renderItemsAndTotals() {
             // VAT / Generic Tax
             dom.rowSingleTax.classList.remove('hidden');
             const avgTaxRate = state.items.reduce((acc, it) => acc + Number(it.taxRate), 0) / (state.items.length || 1);
-            dom.lblSingleTax.textContent = `Tax / VAT (${avgTaxRate.toFixed(1).replace(/\.0$/, '')}%)`;
+            const vatText = getLocaleText('vatLabel');
+            dom.lblSingleTax.textContent = `${vatText} (${avgTaxRate.toFixed(1).replace(/\.0$/, '')}%)`;
             dom.valSingleTax.textContent = formatCurrency(finalTaxSum);
         }
     }
@@ -571,6 +781,31 @@ function loadSavedState() {
                 }
             }
             
+            // Migrate old Odia translations from local storage to the new, natural wording
+            if (parsed.invoiceTitle === 'ଚାଲାଣ') {
+                parsed.invoiceTitle = 'ଇନଭଏସ';
+            }
+            if (parsed.fromFields && Array.isArray(parsed.fromFields)) {
+                parsed.fromFields.forEach(f => {
+                    if (f.label === 'ଇମେଲ୍ ଠିକଣା') f.label = 'ଇମେଲ ଆଡ୍ରେସ';
+                    if (f.label === 'ଫୋନ୍ ସଂଖ୍ୟା') f.label = 'ଫୋନ ନମ୍ବର';
+                });
+            }
+            if (parsed.toFields && Array.isArray(parsed.toFields)) {
+                parsed.toFields.forEach(f => {
+                    if (f.label === 'ଇମେଲ୍ ଠିକଣା') f.label = 'ଇମେଲ ଆଡ୍ରେସ';
+                    if (f.label === 'ଫୋନ୍ ସଂଖ୍ୟା') f.label = 'ଫୋନ ନମ୍ବର';
+                });
+            }
+            if (parsed.notes) {
+                const normalizeNewlines = str => str.replace(/\r\n/g, '\n').trim();
+                const notesNorm = normalizeNewlines(parsed.notes);
+                const oldOdiaNotes = normalizeNewlines(`1. ଦେୟ ଚାଲାଣ ତାରିଖର ୧୫ ଦିନ ମଧ୍ୟରେ କରାଯିବା ଉଚିତ।\n2. ବିକ୍ରି ହୋଇଥିବା ସାମଗ୍ରୀ ଫେରସ୍ତ କିମ୍ବା ବଦଳ କରାଯିବ ନାହିଁ।\n3. Billed ବାଛିଥିବାରୁ ଧନ୍ୟବାଦ!`);
+                if (notesNorm === oldOdiaNotes) {
+                    parsed.notes = `1. ଦେୟ ଇନଭଏସ ତାରିଖର ୧୫ ଦିନ ମଧ୍ୟରେ କରାଯିବା ଉଚିତ।\n2. ବିକ୍ରି ହୋଇଥିବା ସାମଗ୍ରୀ ଫେରସ୍ତ କିମ୍ବା ବଦଳ କରାଯିବ ନାହିଁ।\n3. Billed ବାଛିଥିବାରୁ ଧନ୍ୟବାଦ!`;
+                }
+            }
+            
             state = { ...state, ...parsed };
         } catch (e) {
             console.error("Failed to parse cached invoice state", e);
@@ -601,6 +836,66 @@ function bindEvents() {
         autoSaveToLocalStorage();
     });
 
+    // Language selector
+    dom.languageSelect.addEventListener('change', (e) => {
+        const oldLang = state.language || 'en';
+        const newLang = e.target.value;
+        state.language = newLang;
+        
+        // Translate dynamic address fields
+        translateAddressFields(oldLang, newLang);
+        
+        // Translate notes if they were default
+        const normalizeNewlines = str => str.replace(/\r\n/g, '\n').trim();
+        const currentNotesNormalized = normalizeNewlines(state.notes || '');
+        const enNotesNorm = normalizeNewlines(`1. Payment should be made within 15 days of invoice date.\n2. Goods once sold will not be taken back or exchanged.\n3. Thank you for choosing Billed!`);
+        const orNotesNorm = normalizeNewlines(`1. ଦେୟ ଇନଭଏସ ତାରିଖର ୧୫ ଦିନ ମଧ୍ୟରେ କରାଯିବା ଉଚିତ।\n2. ବିକ୍ରି ହୋଇଥିବା ସାମଗ୍ରୀ ଫେରସ୍ତ କିମ୍ବା ବଦଳ କରାଯିବ ନାହିଁ।\n3. Billed ବାଛିଥିବାରୁ ଧନ୍ୟବାଦ!`);
+        const enDefaultNotesNorm = normalizeNewlines(`Thank you for your business!`);
+        const orDefaultNotesNorm = normalizeNewlines(`ଆପଣଙ୍କ ବ୍ୟବସାୟ ପାଇଁ ଧନ୍ୟବାଦ!`);
+        
+        if (newLang === 'or') {
+            if (currentNotesNormalized === enNotesNorm) {
+                state.notes = `1. ଦେୟ ଇନଭଏସ ତାରିଖର ୧୫ ଦିନ ମଧ୍ୟରେ କରାଯିବା ଉଚିତ।\n2. ବିକ୍ରି ହୋଇଥିବା ସାମଗ୍ରୀ ଫେରସ୍ତ କିମ୍ବା ବଦଳ କରାଯିବ ନାହିଁ।\n3. Billed ବାଛିଥିବାରୁ ଧନ୍ୟବାଦ!`;
+                dom.invoiceNotes.value = state.notes;
+            } else if (currentNotesNormalized === enDefaultNotesNorm) {
+                state.notes = `ଆପଣଙ୍କ ବ୍ୟବସାୟ ପାଇଁ ଧନ୍ୟବାଦ!`;
+                dom.invoiceNotes.value = state.notes;
+            }
+            if (state.invoiceTitle.trim() === 'INVOICE' || state.invoiceTitle.trim() === 'ଚାଲାଣ') {
+                state.invoiceTitle = 'ଇନଭଏସ';
+                dom.invoiceTitle.value = 'ଇନଭଏସ';
+            }
+        } else if (newLang === 'en') {
+            if (currentNotesNormalized === orNotesNorm) {
+                state.notes = `1. Payment should be made within 15 days of invoice date.\n2. Goods once sold will not be taken back or exchanged.\n3. Thank you for choosing Billed!`;
+                dom.invoiceNotes.value = state.notes;
+            } else if (currentNotesNormalized === orDefaultNotesNorm) {
+                state.notes = `Thank you for your business!`;
+                dom.invoiceNotes.value = state.notes;
+            }
+            if (state.invoiceTitle.trim() === 'ଇନଭଏସ') {
+                state.invoiceTitle = 'INVOICE';
+                dom.invoiceTitle.value = 'INVOICE';
+            }
+        }
+        
+        applyLanguage();
+        renderAddressFields('from');
+        renderAddressFields('to');
+        
+        // Update label text for discount input
+        if (state.discountType === 'percentage') {
+            const base = getLocaleText('discountValLabel');
+            dom.discountValLabel.textContent = `${base} (%)`;
+        } else if (state.discountType === 'flat') {
+            const base = getLocaleText('discountValLabel');
+            dom.discountValLabel.textContent = `${base} (${state.currencySymbol})`;
+        }
+        
+        renderItemsAndTotals();
+        autoSaveToLocalStorage();
+    });
+
     // Currency selector
     dom.currencySelect.addEventListener('change', (e) => {
         const option = e.target.options[e.target.selectedIndex];
@@ -609,7 +904,8 @@ function bindEvents() {
         
         // Update label text for discount input if flat is active
         if (state.discountType === 'flat') {
-            dom.discountValLabel.textContent = `Global Discount (${state.currencySymbol})`;
+            const base = getLocaleText('discountValLabel');
+            dom.discountValLabel.textContent = `${base} (${state.currencySymbol})`;
         }
         
         renderItemsAndTotals();
@@ -656,12 +952,14 @@ function bindEvents() {
         dom.discountValueSection.classList.toggle('hidden', state.discountType === 'none' || state.discountType === 'per-item');
         
         if (state.discountType === 'percentage') {
-            dom.discountValLabel.textContent = 'Global Discount (%)';
+            const base = getLocaleText('discountValLabel');
+            dom.discountValLabel.textContent = `${base} (%)`;
             dom.globalDiscountValueInput.max = 100;
             if (state.globalDiscountValue > 100) state.globalDiscountValue = 10;
             dom.globalDiscountValueInput.value = state.globalDiscountValue;
         } else if (state.discountType === 'flat') {
-            dom.discountValLabel.textContent = `Global Discount (${state.currencySymbol})`;
+            const base = getLocaleText('discountValLabel');
+            dom.discountValLabel.textContent = `${base} (${state.currencySymbol})`;
             dom.globalDiscountValueInput.removeAttribute('max');
         }
         
@@ -772,7 +1070,7 @@ function bindEvents() {
             
             // Do not delete the last row completely
             if (state.items.length <= 1) {
-                alert("An invoice must contain at least one item line.");
+                alert(getLocaleText('alertMinItems'));
                 return;
             }
             
@@ -905,7 +1203,7 @@ function bindEvents() {
     });
 
     dom.btnReset.addEventListener('click', () => {
-        if (confirm("Are you sure you want to clear this entire invoice? This action cannot be undone.")) {
+        if (confirm(getLocaleText('confirmReset'))) {
             resetForm();
         }
     });
@@ -976,7 +1274,7 @@ function bindEvents() {
     const btnCapsuleReset = document.getElementById('btn-capsule-reset');
     if (btnCapsuleReset) {
         btnCapsuleReset.addEventListener('click', () => {
-            if (confirm("Are you sure you want to clear this entire invoice? This action cannot be undone.")) {
+            if (confirm(getLocaleText('confirmReset'))) {
                 resetForm();
             }
         });
@@ -1084,9 +1382,28 @@ function renderTotalsOnly() {
 
 // Reset form to default empty state
 function resetForm() {
+    const currentLang = state.language || 'en';
     state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    state.language = currentLang;
     state.items[0].id = Date.now(); // assign unique id
     state.invoicePo = generateRandomPONumber(); // generate auto PO number
+    
+    // Set localized defaults
+    if (currentLang === 'or') {
+        state.invoiceTitle = 'ଇନଭଏସ';
+        state.notes = 'ଆପଣଙ୍କ ବ୍ୟବସାୟ ପାଇଁ ଧନ୍ୟବାଦ!';
+        state.fromFields.forEach(f => {
+            if (defaultFieldLabels.or[f.id]) {
+                f.label = defaultFieldLabels.or[f.id];
+            }
+        });
+        state.toFields.forEach(f => {
+            if (defaultFieldLabels.or[f.id]) {
+                f.label = defaultFieldLabels.or[f.id];
+            }
+        });
+    }
+    
     initializeDates();
     loadStateToDOM();
     renderItemsAndTotals();
@@ -1095,70 +1412,141 @@ function resetForm() {
 
 // Populate invoice with high fidelity demonstration data
 function loadSampleData() {
-    state = {
-        invoiceTitle: 'INVOICE',
-        invoiceNumber: 'INV-2026-8809',
-        invoiceDate: new Date().toISOString().split('T')[0],
-        invoiceDueDate: (() => {
-            const d = new Date();
-            d.setDate(d.getDate() + 15);
-            return d.toISOString().split('T')[0];
-        })(),
-        invoicePo: 'PO-98402',
-        
-        fromName: 'Pixelflow Studio Pvt. Ltd.',
-        fromFields: [
-            { id: 'email', label: 'Email Address', value: 'contact@pixelflow.design' },
-            { id: 'phone', label: 'Phone Number', value: '+91 80 4092 1122' },
-            { id: 'address', label: 'Address', value: 'Block C, Sector 5, HSR Layout\nBangalore, Karnataka, 560102', type: 'textarea' },
-            { id: 'tax', label: 'GSTIN', value: '29AAAAA0000A1Z5' }
-        ],
-        
-        toName: 'Apex Innovations LLC',
-        toFields: [
-            { id: 'email', label: 'Email Address', value: 'accounts@apexinnov.com' },
-            { id: 'phone', label: 'Phone Number', value: '+1 (555) 902-8840' },
-            { id: 'address', label: 'Address', value: '990 Mission Street, Suite 210\nSan Francisco, California, 94103', type: 'textarea' },
-            { id: 'tax', label: 'Tax ID', value: 'US-9930294-B' }
-        ],
-        
-        currency: 'USD',
-        currencySymbol: '$',
-        
-        taxEnabled: true,
-        taxType: 'IGST',
-        defaultTaxRate: 18,
-        
-        discountType: 'percentage',
-        globalDiscountValue: 10,
-        
-        shippingEnabled: true,
-        shippingCost: 75,
-        
-        bankEnabled: true,
-        bankName: 'ICICI Bank Ltd',
-        bankAccount: '000201994850',
-        bankIfsc: 'ICIC0000002',
-        bankBranch: 'HSR Layout Branch, Bangalore',
-        
-        upiEnabled: true,
-        upiId: 'pixelflow@icici',
-        
-        notesEnabled: true,
-        notes: '1. Please include the Invoice Number in the payment reference.\n2. Payment via UPI or direct wire transfer is accepted.\n3. Custom designs carry a 3-month support warranty. Thank you!',
-        
-        amountPaid: 1200,
-        
-        theme: 'theme-indigo',
-        fontFamily: 'font-outfit',
-        logoBase64: state.logoBase64, // retain logo if already set
-        
-        items: [
-            { id: 101, name: 'SaaS Dashboard Design System', description: 'Complete Figma UI Kit with 200+ components, responsive layouts, and light/dark templates.', quantity: 1, rate: 2500, taxRate: 18, discountRate: 0 },
-            { id: 102, name: 'Frontend React Development', description: 'Implementation of the approved high fidelity dashboard UI using React/Next.js (60 hours @ $40/hr).', quantity: 60, rate: 40, taxRate: 18, discountRate: 0 },
-            { id: 103, name: 'Copywriting & Content Strategy', description: 'Creation of marketing copy, onboarding flows, and notification templates.', quantity: 1, rate: 650, taxRate: 5, discountRate: 0 }
-        ]
-    };
+    const currentLang = state.language || 'en';
+    
+    if (currentLang === 'or') {
+        state = {
+            language: 'or',
+            invoiceTitle: 'ଇନଭଏସ',
+            invoiceNumber: 'INV-2026-8809',
+            invoiceDate: new Date().toISOString().split('T')[0],
+            invoiceDueDate: (() => {
+                const d = new Date();
+                d.setDate(d.getDate() + 15);
+                return d.toISOString().split('T')[0];
+            })(),
+            invoicePo: 'PO-98402',
+            
+            fromName: 'ପିକ୍ସେଲଫ୍ଲୋ ଷ୍ଟୁଡିଓ ପ୍ରାଇଭେଟ ଲିମିଟେଡ',
+            fromFields: [
+                { id: 'email', label: 'ଇମେଲ ଆଡ୍ରେସ', value: 'contact@pixelflow.design' },
+                { id: 'phone', label: 'ଫୋନ ନମ୍ବର', value: '+91 80 4092 1122' },
+                { id: 'address', label: 'ଠିକଣା', value: 'ବ୍ଲକ C, ସେକ୍ଟର ୫, HSR ଲେଆଉଟ୍\nବେଙ୍ଗାଲୁରୁ, କର୍ଣ୍ଣାଟକ, ୫୬୦୧୦୨', type: 'textarea' },
+                { id: 'tax', label: 'ଜିଏସଟିଆଇଏନ୍ (GSTIN)', value: '29AAAAA0000A1Z5' }
+            ],
+            
+            toName: 'ଏପେକ୍ସ ଇନୋଭେସନ୍ସ LLC',
+            toFields: [
+                { id: 'email', label: 'ଇମେଲ ଆଡ୍ରେସ', value: 'accounts@apexinnov.com' },
+                { id: 'phone', label: 'ଫୋନ ନମ୍ବର', value: '+1 (555) 902-8840' },
+                { id: 'address', label: 'ଠିକଣା', value: '୯୯୦ ମିଶନ ଷ୍ଟ୍ରିଟ, ସୁଇଟ ୨୧୦\nସାନ ଫ୍ରାନ୍ସିସ୍କୋ, କାଲିଫର୍ଣ୍ଣିଆ, ୯୪୧୦୩', type: 'textarea' },
+                { id: 'tax', label: 'ଟ୍ୟାକ୍ସ ID', value: 'US-9930294-B' }
+            ],
+            
+            currency: 'USD',
+            currencySymbol: '$',
+            
+            taxEnabled: true,
+            taxType: 'IGST',
+            defaultTaxRate: 18,
+            
+            discountType: 'percentage',
+            globalDiscountValue: 10,
+            
+            shippingEnabled: true,
+            shippingCost: 75,
+            
+            bankEnabled: true,
+            bankName: 'ଆଇସିଆଇସିଆଇ ବ୍ୟାଙ୍କ ଲିମିଟେଡ',
+            bankAccount: '000201994850',
+            bankIfsc: 'ICIC0000002',
+            bankBranch: 'HSR ଲେଆଉଟ୍ ଶାଖା, ବେଙ୍ଗାଲୁରୁ',
+            
+            upiEnabled: true,
+            upiId: 'pixelflow@icici',
+            
+            notesEnabled: true,
+            notes: '1. ଦୟାକରି ପେମେଣ୍ଟ ରେଫରେନ୍ସରେ ଇନଭଏସ ନମ୍ବର ଉଲ୍ଲେଖ କରନ୍ତୁ।\n2. UPI କିମ୍ବା ବ୍ୟାଙ୍କ ଟ୍ରାନ୍ସଫର ମାଧ୍ୟମରେ ପେମେଣ୍ଟ ଗ୍ରହଣ କରାଯିବ।\n3. ସମସ୍ତ ଡିଜାଇନର ୩ ମାସର ସପୋର୍ଟ ୱାରେଣ୍ଟି ରହିଛି। ଧନ୍ୟବାଦ!',
+            
+            amountPaid: 1200,
+            
+            theme: 'theme-indigo',
+            fontFamily: 'font-outfit',
+            logoBase64: state.logoBase64, // retain logo if already set
+            
+            items: [
+                { id: 101, name: 'SaaS ଡ୍ୟାସବୋର୍ଡ ଡିଜାଇନ ସିଷ୍ଟମ', description: '୨୦୦+ କମ୍ପୋନେଣ୍ଟସ, ରେସପନ୍ସିଭ ଲେଆଉଟ୍ ଏବଂ ଲାଇଟ/ଡାର୍କ ଟେମ୍ପଲେଟ ସହିତ ସମ୍ପୂର୍ଣ୍ଣ Figma UI କିଟ୍।', quantity: 1, rate: 2500, taxRate: 18, discountRate: 0 },
+                { id: 102, name: 'ଫ୍ରଣ୍ଟଏଣ୍ଡ ରିଆକ୍ଟ ଡେଭଲପମେଣ୍ଟ', description: 'ଅନୁମୋଦିତ ଡ୍ୟାସବୋର୍ଡ UI ର ରିଆକ୍ଟ/Next.js କୋଡିଂ (୬୦ ଘଣ୍ଟା @ $୪୦/ଘଣ୍ଟା)।', quantity: 60, rate: 40, taxRate: 18, discountRate: 0 },
+                { id: 103, name: 'କପିରାଇଟିଂ ଏବଂ କଣ୍ଟେଣ୍ଟ ରଣନୀତି', description: 'ମାର୍କେଟିଂ କପି, ଅନବୋର୍ଡିଂ ଫ୍ଲୋ ଏବଂ ନୋଟିଫିକେସନ୍ ଟେମ୍ପଲେଟ ନିର୍ମାଣ।', quantity: 1, rate: 650, taxRate: 5, discountRate: 0 }
+            ]
+        };
+    } else {
+        state = {
+            language: 'en',
+            invoiceTitle: 'INVOICE',
+            invoiceNumber: 'INV-2026-8809',
+            invoiceDate: new Date().toISOString().split('T')[0],
+            invoiceDueDate: (() => {
+                const d = new Date();
+                d.setDate(d.getDate() + 15);
+                return d.toISOString().split('T')[0];
+            })(),
+            invoicePo: 'PO-98402',
+            
+            fromName: 'Pixelflow Studio Pvt. Ltd.',
+            fromFields: [
+                { id: 'email', label: 'Email Address', value: 'contact@pixelflow.design' },
+                { id: 'phone', label: 'Phone Number', value: '+91 80 4092 1122' },
+                { id: 'address', label: 'Address', value: 'Block C, Sector 5, HSR Layout\nBangalore, Karnataka, 560102', type: 'textarea' },
+                { id: 'tax', label: 'GSTIN', value: '29AAAAA0000A1Z5' }
+            ],
+            
+            toName: 'Apex Innovations LLC',
+            toFields: [
+                { id: 'email', label: 'Email Address', value: 'accounts@apexinnov.com' },
+                { id: 'phone', label: 'Phone Number', value: '+1 (555) 902-8840' },
+                { id: 'address', label: 'Address', value: '990 Mission Street, Suite 210\nSan Francisco, California, 94103', type: 'textarea' },
+                { id: 'tax', label: 'Tax ID', value: 'US-9930294-B' }
+            ],
+            
+            currency: 'USD',
+            currencySymbol: '$',
+            
+            taxEnabled: true,
+            taxType: 'IGST',
+            defaultTaxRate: 18,
+            
+            discountType: 'percentage',
+            globalDiscountValue: 10,
+            
+            shippingEnabled: true,
+            shippingCost: 75,
+            
+            bankEnabled: true,
+            bankName: 'ICICI Bank Ltd',
+            bankAccount: '000201994850',
+            bankIfsc: 'ICIC0000002',
+            bankBranch: 'HSR Layout Branch, Bangalore',
+            
+            upiEnabled: true,
+            upiId: 'pixelflow@icici',
+            
+            notesEnabled: true,
+            notes: '1. Please include the Invoice Number in the payment reference.\n2. Payment via UPI or direct wire transfer is accepted.\n3. Custom designs carry a 3-month support warranty. Thank you!',
+            
+            amountPaid: 1200,
+            
+            theme: 'theme-indigo',
+            fontFamily: 'font-outfit',
+            logoBase64: state.logoBase64, // retain logo if already set
+            
+            items: [
+                { id: 101, name: 'SaaS Dashboard Design System', description: 'Complete Figma UI Kit with 200+ components, responsive layouts, and light/dark templates.', quantity: 1, rate: 2500, taxRate: 18, discountRate: 0 },
+                { id: 102, name: 'Frontend React Development', description: 'Implementation of the approved high fidelity dashboard UI using React/Next.js (60 hours @ $40/hr).', quantity: 60, rate: 40, taxRate: 18, discountRate: 0 },
+                { id: 103, name: 'Copywriting & Content Strategy', description: 'Creation of marketing copy, onboarding flows, and notification templates.', quantity: 1, rate: 650, taxRate: 5, discountRate: 0 }
+            ]
+        };
+    }
     
     loadStateToDOM();
     renderItemsAndTotals();
